@@ -21,7 +21,7 @@ services:
       - inception
     env_file:
       - .env
-    restart: on-failure:2
+    restart: always
   wordpress:
     container_name: wordpress
     build: ./wordpress/.
@@ -34,7 +34,7 @@ services:
       - .env
     networks:
       - inception
-    restart: on-failure:2
+    restart: always
   mariadb:
     container_name: mariadb
     build: ./mariadb/.
@@ -47,4 +47,4 @@ services:
       - .env
     networks:
       - inception
-    restart: on-failure:2
+    restart: always
