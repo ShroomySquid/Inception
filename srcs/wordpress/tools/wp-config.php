@@ -4,26 +4,13 @@
  */
 
 // ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
 define( 'DB_NAME', 'db1' );
-
-/** MySQL database username */
 define( 'DB_USER', 'user' );
-
-/** MySQL database password */
 define( 'DB_PASSWORD', 'pwd' );
-
-/** MySQL hostname */
 define( 'DB_HOST', 'mariadb' );
-
-/** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
-
-/** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
-
 define( 'WP_ALLOW_REPAIR', true );
-
 define( 'AUTH_KEY',         '):Uw9 :|7$m3yy=c^IM%d8}zG6yXY%25SDUyr.r#GcDP)[b25Yn$sDLNwR~I=kwq' );
 define( 'SECURE_AUTH_KEY',  'lBWxAzhu=StQ(s-[t_D8yH8_`0NiM~d[m q<{Hri]n#UM3J;@x[ne;,k<~cN`~%,' );
 define( 'LOGGED_IN_KEY',    ' /e+%ecWs`>hA<s`|+7rmujt>3MA}GD*n=D7W%$8h*Xc!jP?hn+fw0#;;g{Ywl@k' );
