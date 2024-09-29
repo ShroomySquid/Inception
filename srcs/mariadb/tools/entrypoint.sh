@@ -13,7 +13,7 @@ echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' ;" >> d
 echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;" >> db1.sql
 echo "FLUSH PRIVILEGES;" >> db1.sql
 
-mysqld --user=mysql < db1.sql
+mysqld --user=mysql --bootstrap < db1.sql
 
 rm -f db1.sql
 
