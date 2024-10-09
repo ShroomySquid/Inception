@@ -12,14 +12,27 @@ services:
     build: ./nginx/.
     image: nginx:42
     ports:
-     - "443:443"
+     - "80:80"
     volumes:
       - ./web:/var/www/html
+    env_file:
+      - .env
     restart: always
+
   wordpress:
     build: ./wordpress/.
-    container_name: wp-php
+    container_name: wordpress
     image: wordpress:42
+    ports:
+      - "9000:9000"
     volumes:
       - ./web:/var/www/html
+    env_file:
+      - .env
     restart: always
+
+  mariadb:
+    build: ./mariadb/.
+    container_name: mariadb
+    env_file:
+      - .env

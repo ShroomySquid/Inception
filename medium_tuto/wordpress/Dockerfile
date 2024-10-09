@@ -6,6 +6,12 @@ RUN apt upgrade
 
 RUN apt install -y php-fpm
 
+RUN apt install php-mysqli -y
+
+RUN apt install curl -y
+
+RUN apt install nano -y
+
 COPY ./tools/www.conf /etc/php/7.4/fmp/pool.d/www.conf
 
 COPY ./tools/entrypoint.sh .
