@@ -22,6 +22,4 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 
 EXPOSE 9000
 
-#WORKDIR /var/www/html
-
-ENTRYPOINT ["entrypoint.sh"]
+CMD ["./entrypoint.sh"]

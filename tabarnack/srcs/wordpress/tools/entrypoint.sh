@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /var/www/html
+
 if [ ! -d /run/php ]; then
   service php7.4-fpm start
   service php7.4-fpm stop

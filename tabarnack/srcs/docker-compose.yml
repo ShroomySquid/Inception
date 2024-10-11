@@ -1,6 +1,18 @@
 volumes:
   wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/fbarrett/data/wordpress'
   mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/fbarrett/data/mariadb'
 
 networks:
   inception:
