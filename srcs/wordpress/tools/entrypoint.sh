@@ -2,39 +2,31 @@
 
 cd /var/www/html
 
-rm -rf *
+if [ ! -d /run/php ]; then
+  service php7.4-fpm start
+  service php7.4-fpm stop
+fi
 
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 
 
-chmod +x wp-cli.phar 
+if [[ ${WP_ADMIN,,} == *"admin"* ]]; then
+  echo "Error: Username can't contain the 'admin'"
+  exit 1
+fi
 
-mv wp-cli.phar /usr/local/bin/wp
+if [[ ${WP_PASSWORD,,} == *${WP_ADMIN,,}* ]]; then
+  echo "Error: Passord can't contain the username"
+  exit 1
+fi
 
-wp core download --allow-root
 
-cp ../../../wp-config.php wp-config.php
+if [ ! -f /var/www/html/wp-config.php ]; then
+  wp core download --allow-root --path=/var/www/html
+  wp config create --allow-root --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbhost=mariadb:3306
+  wp core install --allow-root --url="${DOMAIN_NAME}" --title="${WP_TITLE}" --admin_name="${WP_ADMIN}" --admin_password="${WP_PASSWORD}" --admin_email="${WP_EMAIL}" --skip-email
+  wp user create --allow-root "${WP_USER}" "${WP_USER_EMAIL}" --user_pass="${WP_USER_PASSWORD}" --role=author
+  /usr/sbin/php-fpm7.4 -F
+fi
 
-sed -i -r "s/db1/$db_name/"   wp-config.php
-sed -i -r "s/user/$db_user/"  wp-config.php
-sed -i -r "s/pwd/$db_pwd/"    wp-config.php
-
-until mysql -u"$db_user" -p"$db_pwd" -e "SHOW DATABASES;" > /dev/null 2>&1; do
-    echo "Waiting for database connection..."
-	sleep 5
-done
-
-#sleep 10
-
-wp core install --url=$DOMAIN_NAME --title=$WP_TITLE --admin_user=$WP_ADMIN_USR --admin_password=$WP_ADMIN_PWD --admin_email=$WP_ADMIN_EMAIL --skip-email --allow-root
-
-wp user create $WP_USR $WP_EMAIL --role=author --user_pass=$WP_PWD --allow-root
-
-wp theme install astra --activate --allow-root
-
-wp plugin update --all --allow-root
-
-mkdir /run/php
-
-sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
-
-/usr/sbin/php-fpm7.4 -F
+if [ -f /var/www/html/wp-config.php ]; then
+  /usr/sbin/php-fpm7.4 -F
+fi

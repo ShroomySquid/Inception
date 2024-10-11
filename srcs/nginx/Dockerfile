@@ -1,21 +1,22 @@
-FROM debian:bullseye
+FROM debian:oldstable
 
-RUN apt -y update
+RUN apt update
 
-RUN apt install -y nginx
+RUN apt upgrade -y
 
-RUN apt install openssl -y
+RUN apt install -y nginx openssl
 
-RUN apt install nano -y
+RUN apt install -y nano
 
-COPY ./tools/entrypoint.sh .
+RUN mkdir -p /etc/nginx/ssl
 
-RUN chmod +x entrypoint.sh
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+  -out /etc/ssl/certs/cert.crt \
+  -keyout /etc/ssl/private/key.key \
+  -subj "/C=CA/ST=Quebec/L=Quebec/O=42/OU=inception/CN=fbarrette.42.ca"
 
-#RUN chmod +x /etc/ssl/private/
-#RUN chmod +x /etc/ssl/certs/
+COPY tools/nginx.conf /etc/nginx/conf.d/nginx.conf
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=CA/L=Quebec/0=42/OU=etudiant/CN=fbarrett.42.ca"
+EXPOSE 443
 
-CMD ["/entrypoint.sh"]
-
+CMD ["nginx", "-g", "daemon off;"]

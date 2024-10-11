@@ -1,17 +1,25 @@
-FROM debian:bullseye
+FROM debian:oldstable
 
-RUN apt update -y
+RUN apt update
 
-RUN apt install php-fpm php-mysql -y
+RUN apt upgrade -y
 
-RUN apt install curl -y
+RUN apt install -y php-fpm wget php-mysql mariadb-client
 
-RUN apt install nano -y
+RUN apt install -y nano
 
-COPY ./tools/entrypoint.sh .
+COPY tools/entrypoint.sh .
 
-COPY ./tools/wp-config.php .
+COPY tools/www.conf /etc/php/7.4/fpm/pool.d
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x entrypoint.sh
 
-CMD ["/entrypoint.sh"]
+RUN chmod +x wp-cli.phar
+
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+EXPOSE 9000
+
+CMD ["./entrypoint.sh"]

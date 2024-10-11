@@ -1,19 +1,21 @@
-FROM debian:bullseye
+FROM debian:oldstable
 
-RUN apt-get update -y
+RUN apt update
+
+RUN apt upgrade -y
 
 RUN apt-get install mariadb-server -y
 
-RUN apt install sudo
+RUN apt install -y nano
 
-RUN apt install nano -y
+COPY tools/entrypoint.sh .
 
-COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-
-COPY ./tools/entrypoint.sh .
+COPY tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
 RUN chmod +x entrypoint.sh
 
-#RUN chmod 777 /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN chmod 600 /etc/mysql/mariadb.conf.d/50-server.cnf
 
-CMD ["/entrypoint.sh"]
+EXPOSE 3306
+
+CMD ["./entrypoint.sh"]
