@@ -2,6 +2,8 @@
 
 cd /var/www/html
 
+echo $DOMAIN_NAME
+
 if [ ! -d /run/php ]; then
   service php7.4-fpm start
   service php7.4-fpm stop
@@ -30,3 +32,6 @@ fi
 if [ -f /var/www/html/wp-config.php ]; then
   /usr/sbin/php-fpm7.4 -F
 fi
+
+chown -R www-data:www-data /var/www/html/wp-content/uploads
+chmod -R 755 /var/www/html/wp-content/uploads

@@ -1,18 +1,22 @@
 volumes:
   wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/fbarrett/data/wordpress'
   mariadb:
-    name: mariadb
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/fbarrett/data/mariadb'
+
+#volumes:
+#  wordpress:
+#    name: wordpress
+#    driver: local
+#    driver_opts:
+#      type: 'none'
+#      o: 'bind'
+#      device: '/home/fbarrett/data/wordpress'
+#  mariadb:
+#    name: mariadb
+#    driver: local
+#    driver_opts:
+#      type: 'none'
+#      o: 'bind'
+#      device: '/home/fbarrett/data/mariadb'
 
 networks:
   inception:
@@ -54,6 +58,8 @@ services:
       - wordpress:/var/www/html
     ports:
       - 443:443
+    env_file:
+      - .env
     depends_on:
       - wordpress
     networks:
